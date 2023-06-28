@@ -6,9 +6,11 @@ import com.tencent.wxcloudrun.dto.LoginDTO;
 import com.tencent.wxcloudrun.model.Admin;
 import com.tencent.wxcloudrun.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
