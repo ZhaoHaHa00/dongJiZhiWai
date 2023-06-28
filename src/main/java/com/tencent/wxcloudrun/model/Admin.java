@@ -17,5 +17,5 @@ public class Admin {
 
     private String city;
 
-    private int validNum;
+    private String validNum;
 }

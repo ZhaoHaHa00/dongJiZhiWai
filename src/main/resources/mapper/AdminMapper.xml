@@ -6,4 +6,7 @@
         SELECT TYPE FROM Admin WHERE username=#{loginDTO.user} AND password=#{loginDTO.password}
     </select>
 
+    <select id="getAllAdmin" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT * FROM Admin WHERE username!='admin'
+    </select>
 </mapper>
