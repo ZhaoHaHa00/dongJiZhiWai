@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import com.tencent.wxcloudrun.common.ServiceResponse;
+import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.AdminMapper;
 import com.tencent.wxcloudrun.dto.LoginDTO;
 import com.tencent.wxcloudrun.model.Admin;
@@ -17,11 +17,11 @@ public class LoginServiceImpl implements LoginService {
     private AdminMapper adminMapper;
 
     @Override
-    public ServiceResponse<String> login(LoginDTO loginDTO) {
+    public ApiResponse login(LoginDTO loginDTO) {
         Admin admin = adminMapper.getAdminInfo(loginDTO);
         if (Objects.isNull(admin)) {
-            return new ServiceResponse<>(88, "0", null);
+            return ApiResponse.error("0");
         }
-        return new ServiceResponse<>(88, admin.getType().toString(), null);
+        return ApiResponse.ok(admin.getType().toString());
     }
 }

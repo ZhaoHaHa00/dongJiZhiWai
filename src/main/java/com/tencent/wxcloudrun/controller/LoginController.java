@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.controller;
 
-import com.tencent.wxcloudrun.common.ServiceResponse;
+import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dto.LoginDTO;
 import com.tencent.wxcloudrun.service.LoginService;
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +16,10 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public ServiceResponse<String> login(@RequestBody LoginDTO loginDTO){
+    public ApiResponse login(@RequestBody LoginDTO loginDTO){
 
         if (StringUtils.isEmpty(loginDTO.getUser()) || StringUtils.isEmpty(loginDTO.getPassword())) {
-            return new ServiceResponse<>(88, "请完整填写账号密码", null);
+            return ApiResponse.error("请完整填写账号密码");
         }
 
         return loginService.login(loginDTO);
