@@ -38,8 +38,8 @@ public class LoginController {
 
     @PostMapping("/update")
     public ApiResponse updateAdmin(@RequestBody Admin admin){
-        String usernameRegex = "^[0-9][a-z][A-Z]{4,12}$";
-        String passwordRegex = "^[0-9][a-z][A-Z]{6,16}$";
+        String usernameRegex = "^[0-9a-zA-Z]{4,16}$";
+        String passwordRegex = "^[0-9a-zA-Z]{6,18}$";
         String validNumRegex = "^[0-9]{4}$";
 
         String username = admin.getUsername();
@@ -47,7 +47,7 @@ public class LoginController {
             return ApiResponse.error("用户名不可为空");
         }
         if (!username.matches(usernameRegex)){
-            return ApiResponse.error("用户名只支持4-12位数字及英文组合");
+            return ApiResponse.error("用户名只支持4-16位数字及英文组合");
         }
 
         String password = admin.getPassword();
@@ -55,7 +55,7 @@ public class LoginController {
             return ApiResponse.error("密码不可为空");
         }
         if (!password.matches(passwordRegex)) {
-            return ApiResponse.error("密码只支持6-16位数字及英文组合");
+            return ApiResponse.error("密码只支持6-18位数字及英文组合");
         }
 
         String validNum = admin.getValidNum();
