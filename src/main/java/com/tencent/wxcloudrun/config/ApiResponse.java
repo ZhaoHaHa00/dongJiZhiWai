@@ -30,6 +30,6 @@ public final class ApiResponse {
   }
 
   public static ApiResponse error(String errorMsg) {
-    return new ApiResponse(0, errorMsg, new HashMap<>());
+    return new ApiResponse(88, errorMsg, new HashMap<>());
   }
 }

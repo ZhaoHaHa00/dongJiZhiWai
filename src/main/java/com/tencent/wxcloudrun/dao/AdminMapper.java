@@ -13,4 +13,10 @@ public interface AdminMapper {
     Admin getAdminInfo(@Param("loginDTO") LoginDTO loginDTO);
 
     List<Admin> getAllAdmin();
+
+    void insertAdmin(@Param("admin")Admin admin);
+
+    void updateAdmin(@Param("admin")Admin admin);
+
+    void deleteAdmin(@Param("id") Integer id);
 }

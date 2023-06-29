@@ -7,6 +7,21 @@
     </select>
 
     <select id="getAllAdmin" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT * FROM Admin WHERE username!='admin'
+        SELECT * FROM Admin WHERE username!='admin' ORDER BY validNum ASC
     </select>
+
+    <insert id="insertAdmin" parameterType="com.tencent.wxcloudrun.model.Admin">
+        INSERT INTO Admin(username,password,type,storeName,city,validNum)
+        values(#{admin.username},#{admin.password},#{admin.type},#{admin.storeName},#{admin.city},#{admin.validNum})
+    </insert>
+
+    <update id="updateAdmin" parameterType="com.tencent.wxcloudrun.model.Admin">
+        UPDATE Admin SET username=#{admin.username},password=#{admin.password},type=#{admin.type},
+                         storeName=#{admin.storeName},city=#{admin.city},validNum=#{admin.validNum}
+        WHERE ID=#{admin.id}
+    </update>
+
+    <delete id="deleteAdmin">
+        DELETE FROM Admin WHERE ID=#{id}
+    </delete>
 </mapper>
