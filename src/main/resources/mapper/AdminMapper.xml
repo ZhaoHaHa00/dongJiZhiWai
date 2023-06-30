@@ -3,7 +3,7 @@
 <mapper namespace="com.tencent.wxcloudrun.dao.AdminMapper">
 
     <select id="getAdminInfo" parameterType="com.tencent.wxcloudrun.dto.LoginDTO" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT TYPE FROM Admin WHERE username=#{loginDTO.user} AND password=#{loginDTO.password}
+        SELECT * FROM Admin WHERE username=#{loginDTO.user} AND password=#{loginDTO.password}
     </select>
 
     <select id="getAllAdmin" resultType="com.tencent.wxcloudrun.model.Admin">

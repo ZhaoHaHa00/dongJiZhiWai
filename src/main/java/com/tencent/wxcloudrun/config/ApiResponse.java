@@ -29,6 +29,10 @@ public final class ApiResponse {
     return new ApiResponse(0, "", data);
   }
 
+  public static ApiResponse ok(String message, Object data) {
+    return new ApiResponse(0, message, data);
+  }
+
   public static ApiResponse error(String errorMsg) {
     return new ApiResponse(88, errorMsg, new HashMap<>());
   }

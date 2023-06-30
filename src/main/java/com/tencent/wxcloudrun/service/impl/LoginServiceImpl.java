@@ -22,6 +22,7 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.isNull(admin)) {
             return ApiResponse.error("0");
         }
-        return ApiResponse.ok(admin.getType().toString());
+
+        return ApiResponse.ok(admin.getType().toString(), admin);
     }
 }
