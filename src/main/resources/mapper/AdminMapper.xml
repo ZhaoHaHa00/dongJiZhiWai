@@ -24,4 +24,16 @@
     <delete id="deleteAdmin">
         DELETE FROM Admin WHERE ID=#{id}
     </delete>
+
+    <select id="validNewItemNum" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT validNum FROM Admin WHERE validNum=#{validNum}
+    </select>
+
+    <select id="validOldItemNum" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT validNum FROM Admin WHERE validNum=#{newNum} AND validNum!=#{oldNum}
+    </select>
+
+    <select id="getAdminInfoById" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT * FROM Admin WHERE id=#{id}
+    </select>
 </mapper>
