@@ -60,4 +60,16 @@ public class RoomServiceImpl implements RoomService {
         roomMapper.deleteRoom(deleteInfo);
         return ApiResponse.ok();
     }
+
+    @Override
+    public ApiResponse validRoom(String validNum, String roomNum) {
+        InsertRoomDTO insertRoomDTO = new InsertRoomDTO();
+        insertRoomDTO.setValidNum(validNum);
+        insertRoomDTO.setRoomNum(roomNum);
+        int count = roomMapper.countSameRoom(insertRoomDTO);
+        if (count==0) {
+            return ApiResponse.error("验证失败");
+        }
+        return ApiResponse.ok();
+    }
 }

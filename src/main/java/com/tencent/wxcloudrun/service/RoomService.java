@@ -10,4 +10,6 @@ public interface RoomService {
     ApiResponse insertRoom(InsertRoomDTO insertRoomDTO);
 
     ApiResponse deleteRoom(InsertRoomDTO deleteInfo);
+
+    ApiResponse validRoom(String validNum, String roomNum);
 }
