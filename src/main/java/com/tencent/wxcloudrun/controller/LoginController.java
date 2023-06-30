@@ -47,7 +47,7 @@ public class LoginController {
             return ApiResponse.error("用户名不可为空");
         }
         if (!username.matches(usernameRegex)){
-            return ApiResponse.error("用户名只支持4-16位数字及英文组合");
+            return ApiResponse.error("用户名不合规");
         }
 
         String password = admin.getPassword();
@@ -55,15 +55,15 @@ public class LoginController {
             return ApiResponse.error("密码不可为空");
         }
         if (!password.matches(passwordRegex)) {
-            return ApiResponse.error("密码只支持6-18位数字及英文组合");
+            return ApiResponse.error("密码不合规");
         }
 
         String validNum = admin.getValidNum();
         if (StringUtils.isEmpty(validNum)) {
-            return ApiResponse.error("管理员编号不可为空");
+            return ApiResponse.error("编号不可为空");
         }
         if (!validNum.matches(validNumRegex)) {
-            return ApiResponse.error("管理员编号必须为4位数字");
+            return ApiResponse.error("编号不合规");
         }
 
         return adminService.updateAdmin(admin);
