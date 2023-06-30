@@ -3,7 +3,6 @@ package com.tencent.wxcloudrun.service.impl;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.RoomMapper;
 import com.tencent.wxcloudrun.dto.InsertRoomDTO;
-import com.tencent.wxcloudrun.model.Admin;
 import com.tencent.wxcloudrun.model.Room;
 import com.tencent.wxcloudrun.service.RoomService;
 import com.tencent.wxcloudrun.vo.RoomVO;
@@ -53,6 +52,12 @@ public class RoomServiceImpl implements RoomService {
         insertRoom.setRoomNum(insertRoomDTO.getRoomNum());
         insertRoom.setCreatedTime(new Date());
         roomMapper.insertRoom(insertRoom);
+        return ApiResponse.ok();
+    }
+
+    @Override
+    public ApiResponse deleteRoom(InsertRoomDTO deleteInfo) {
+        roomMapper.deleteRoom(deleteInfo);
         return ApiResponse.ok();
     }
 }

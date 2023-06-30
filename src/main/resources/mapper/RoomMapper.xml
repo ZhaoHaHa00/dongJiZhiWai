@@ -18,4 +18,8 @@
     <select id="countStoreRoom" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM Room WHERE validNum=#{validNum}
     </select>
+
+    <delete id="deleteRoom" parameterType="com.tencent.wxcloudrun.dto.InsertRoomDTO">
+        DELETE FROM Room WHERE validNum=#{deleteInfo.validNum} AND roomNum=#{deleteInfo.roomNum}
+    </delete>
 </mapper>

@@ -8,4 +8,6 @@ public interface RoomService {
     ApiResponse getAllRoom(String validNum);
 
     ApiResponse insertRoom(InsertRoomDTO insertRoomDTO);
+
+    ApiResponse deleteRoom(InsertRoomDTO deleteInfo);
 }

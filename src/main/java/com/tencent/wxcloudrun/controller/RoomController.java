@@ -22,4 +22,9 @@ public class RoomController {
     public ApiResponse insertRoom(@RequestBody InsertRoomDTO insertRoomDTO){
         return roomService.insertRoom(insertRoomDTO);
     }
+
+    @PostMapping("/delete")
+    public ApiResponse deleteRoom(@RequestBody InsertRoomDTO insertRoomDTO){
+        return roomService.deleteRoom(insertRoomDTO);
+    }
 }
