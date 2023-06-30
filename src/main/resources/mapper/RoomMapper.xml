@@ -5,4 +5,17 @@
     <select id="getAllRoom" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.Room">
         SELECT * FROM Room WHERE validNum=#{validNum}
     </select>
+
+    <insert id="insertRoom" parameterType="com.tencent.wxcloudrun.model.Room">
+        INSERT INTO Room(validNum, roomNum, createdTime)
+        VALUES(#{insertInfo.validNum},#{insertInfo.roomNum},#{insertInfo.createdTime})
+    </insert>
+
+    <select id="countSameRoom" parameterType="com.tencent.wxcloudrun.dto.InsertRoomDTO" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Room WHERE validNum=#{insertInfo.validNum} AND roomNum=#{insertInfo.roomNum}
+    </select>
+
+    <select id="countStoreRoom" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM Room WHERE validNum=#{validNum}
+    </select>
 </mapper>

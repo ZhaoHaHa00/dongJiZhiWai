@@ -2,6 +2,8 @@ package com.tencent.wxcloudrun.service.impl;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.RoomMapper;
+import com.tencent.wxcloudrun.dto.InsertRoomDTO;
+import com.tencent.wxcloudrun.model.Admin;
 import com.tencent.wxcloudrun.model.Room;
 import com.tencent.wxcloudrun.service.RoomService;
 import com.tencent.wxcloudrun.vo.RoomVO;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,5 +33,26 @@ public class RoomServiceImpl implements RoomService {
             resList.add(roomVO);
         }
         return ApiResponse.ok(resList);
+    }
+
+    @Override
+    public ApiResponse insertRoom(InsertRoomDTO insertRoomDTO) {
+
+        int storeCount = roomMapper.countStoreRoom(insertRoomDTO.getValidNum());
+        if (storeCount>4) {
+            return ApiResponse.error("最多五个房间");
+        }
+
+        int sameCount = roomMapper.countSameRoom(insertRoomDTO);
+        if (sameCount>0) {
+            return ApiResponse.error("房间号已存在");
+        }
+
+        Room insertRoom = new Room();
+        insertRoom.setValidNum(insertRoomDTO.getValidNum());
+        insertRoom.setRoomNum(insertRoomDTO.getRoomNum());
+        insertRoom.setCreatedTime(new Date());
+        roomMapper.insertRoom(insertRoom);
+        return ApiResponse.ok();
     }
 }
