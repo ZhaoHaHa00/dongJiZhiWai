@@ -14,7 +14,7 @@ public interface RoomMapper {
 
     void insertRoom(@Param("insertInfo")Room room);
 
-    Integer countSameRoom(@Param("insertInfo")InsertRoomDTO insertInfo);
+    Room getRoomByStoreRoom(@Param("insertInfo")InsertRoomDTO insertInfo);
 
     Integer countStoreRoom(@Param("validNum")String validNum);
 

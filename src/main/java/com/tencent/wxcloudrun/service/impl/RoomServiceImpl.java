@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -42,8 +43,8 @@ public class RoomServiceImpl implements RoomService {
             return ApiResponse.error("最多五个房间");
         }
 
-        int sameCount = roomMapper.countSameRoom(insertRoomDTO);
-        if (sameCount>0) {
+        Room oldRoom = roomMapper.getRoomByStoreRoom(insertRoomDTO);
+        if (Objects.nonNull(oldRoom)) {
             return ApiResponse.error("房间号已存在");
         }
 
@@ -66,10 +67,10 @@ public class RoomServiceImpl implements RoomService {
         InsertRoomDTO insertRoomDTO = new InsertRoomDTO();
         insertRoomDTO.setValidNum(validNum);
         insertRoomDTO.setRoomNum(roomNum);
-        int count = roomMapper.countSameRoom(insertRoomDTO);
-        if (count==0) {
+        Room room = roomMapper.getRoomByStoreRoom(insertRoomDTO);
+        if (Objects.isNull(room)) {
             return ApiResponse.error("验证失败");
         }
-        return ApiResponse.ok();
+        return ApiResponse.ok(room.getId().toString());
     }
 }

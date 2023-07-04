@@ -11,8 +11,8 @@
         VALUES(#{insertInfo.validNum},#{insertInfo.roomNum},#{insertInfo.createdTime})
     </insert>
 
-    <select id="countSameRoom" parameterType="com.tencent.wxcloudrun.dto.InsertRoomDTO" resultType="java.lang.Integer">
-        SELECT COUNT(id) FROM Room WHERE validNum=#{insertInfo.validNum} AND roomNum=#{insertInfo.roomNum}
+    <select id="getRoomByStoreRoom" parameterType="com.tencent.wxcloudrun.dto.InsertRoomDTO" resultType="com.tencent.wxcloudrun.model.Room">
+        SELECT id FROM Room WHERE validNum=#{insertInfo.validNum} AND roomNum=#{insertInfo.roomNum}
     </select>
 
     <select id="countStoreRoom" parameterType="java.lang.String" resultType="java.lang.Integer">
