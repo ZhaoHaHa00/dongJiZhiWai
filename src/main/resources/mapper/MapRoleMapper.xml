@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tencent.wxcloudrun.dao.MapRoleMapper">
+
+    <select id="getLastMapRoom" resultType="com.tencent.wxcloudrun.model.MapRole">
+        SELECT arrivedTime,mapRoom FROM MapRole WHERE roomId=#{roomId} AND roleId=#{roleId} ORDER BY arrivedTime DESC LIMIT 1
+    </select>
+
+    <delete id="deleteByRoomId" parameterType="java.lang.Long">
+        DELETE FROM MapRole WHERE roomId=#{roomId}
+    </delete>
+    
+    <insert id="insertMapRole" parameterType="com.tencent.wxcloudrun.model.MapRole">
+        INSERT INTO MapRole(roomId,roleId,arrivedTime,mapRoom,roleIndex)
+        VALUES(#{mapRole.roomId},#{mapRole.roleId},#{mapRole.arrivedTime},#{mapRole.mapRoom},#{mapRole.roleIndex})
+    </insert>
+
+    <select id="getAllByRoomId" resultType="com.tencent.wxcloudrun.model.MapRole">
+        SELECT roleId,arrivedTime,mapRoom,roleIndex FROM MapRole WHERE rommId=#{roomId} AND roleId!=#{roleId}
+    </select>
+</mapper>

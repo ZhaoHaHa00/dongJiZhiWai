@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tencent.wxcloudrun.dao.MapRoomMapper">
+
+    <insert id="insertMapRoom" parameterType="java.lang.Long">
+        INSERT INTO MapRoom(roomId,mapRoomState)
+        VALUES(#{mapRoom.roomId},0,0)
+    </insert>
+
+    <delete id="deleteByRoomId" parameterType="java.lang.Long">
+        DELETE FROM MapRoom WHERE roomId=#{roomId}
+    </delete>
+
+    <select id="getStateByRoomId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT mapRoomState FROM MapRoom WHERE roomId=#{roomId}
+    </select>
+
+    <update id="finishAllByRoomId" parameterType="java.lang.Long">
+        UPDATE MapRoom SET mapRoomState=1 WHERE roomId=#{roomId}
+    </update>
+
+</mapper>

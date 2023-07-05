@@ -11,4 +11,6 @@ public interface MapService {
     ApiResponse getAllMapRoomInfo();
 
     ApiResponse validTime(RoleWalkDTO walkInfo);
+
+    ApiResponse roleWalk(RoleWalkDTO walkInfo);
 }

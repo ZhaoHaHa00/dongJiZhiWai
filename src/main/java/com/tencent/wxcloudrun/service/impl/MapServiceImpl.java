@@ -2,17 +2,18 @@ package com.tencent.wxcloudrun.service.impl;
 
 import com.tencent.wxcloudrun.common.MapInfo;
 import com.tencent.wxcloudrun.config.ApiResponse;
-import com.tencent.wxcloudrun.dao.MapMapper;
+import com.tencent.wxcloudrun.dao.MapRoleMapper;
+import com.tencent.wxcloudrun.dao.MapRoomMapper;
 import com.tencent.wxcloudrun.dto.RoleWalkDTO;
 import com.tencent.wxcloudrun.model.MapRole;
+import com.tencent.wxcloudrun.model.MapRoom;
 import com.tencent.wxcloudrun.service.MapService;
 import com.tencent.wxcloudrun.vo.MapRoomVO;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.MapKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MapServiceImpl implements MapService {
@@ -20,11 +21,14 @@ public class MapServiceImpl implements MapService {
     private final String finalMapRoom = "9";
 
     @Autowired
-    private MapMapper mapMapper;
+    private MapRoleMapper mapRoleMapper;
+
+    @Autowired
+    private MapRoomMapper mapRoomMapper;
 
     @Override
     public ApiResponse getRolePosition(String roomId, String roleId) {
-        MapRole mapRole = mapMapper.getLastMapRoom(Integer.valueOf(roomId), Integer.valueOf(roleId));
+        MapRole mapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(roomId), Integer.valueOf(roleId));
         if (Objects.isNull(mapRole)) {
             return ApiResponse.ok("room"+MapInfo.roleStartPosition.get(roleId));
         } else {
@@ -44,7 +48,7 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public ApiResponse validTime(RoleWalkDTO walkInfo) {
-        MapRole lastMapRole = mapMapper.getLastMapRoom(Integer.valueOf(walkInfo.getRoomId()), Integer.valueOf(walkInfo.getRoleId()));
+        MapRole lastMapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(walkInfo.getRoomId()), Integer.valueOf(walkInfo.getRoleId()));
         Integer lastArrivedTime;
         Integer lastMapRoom;
         if (Objects.isNull(lastMapRole)) {
@@ -54,7 +58,7 @@ public class MapServiceImpl implements MapService {
             lastArrivedTime = lastMapRole.getArrivedTime();
             lastMapRoom = lastMapRole.getMapRoom();
             if ((lastArrivedTime==60) || (lastArrivedTime+5==60)) {
-                return ApiResponse.error("您的时间已耗尽，不可以前往任何地点");
+                return ApiResponse.error("您的时间已耗尽，不可以前往任何地点\r\n请点击‘查看线索‘查看您的信息");
             }
         }
         //当前玩家选中房间耗时
@@ -68,7 +72,13 @@ public class MapServiceImpl implements MapService {
             currentArrivedTime = lastArrivedTime+5+timeCost;
         } else {
             finalTimeCost = MapInfo.mapRoomTimeCost.get(walkInfo.getToMapRoom()).get(finalMapRoom);
-            currentArrivedTime = lastArrivedTime+5+timeCost+5+finalTimeCost;
+            //起点出发不算搜索时间
+            if (Objects.isNull(lastMapRole)) {
+                currentArrivedTime = timeCost+5+finalTimeCost;
+            } else {
+                currentArrivedTime = lastArrivedTime+5+timeCost+5+finalTimeCost;
+            }
+
         }
 
         if (currentArrivedTime>60) {
@@ -84,7 +94,12 @@ public class MapServiceImpl implements MapService {
                     currentArrivedTime = lastArrivedTime+5+timeCost;
                 } else {
                     finalTimeCost = MapInfo.mapRoomTimeCost.get(toRoom).get(finalMapRoom);
-                    currentArrivedTime = lastArrivedTime+5+timeCost+5+finalTimeCost;
+                    //起点出发不算搜索时间
+                    if (Objects.isNull(lastMapRole)) {
+                        currentArrivedTime = timeCost+5+finalTimeCost;
+                    } else {
+                        currentArrivedTime = lastArrivedTime+5+timeCost+5+finalTimeCost;
+                    }
                 }
                 if (currentArrivedTime<=60) {
                     canGoRoom.add(toRoom);
@@ -92,9 +107,62 @@ public class MapServiceImpl implements MapService {
             }
             return ApiResponse.error(
                     "前往"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"后，剩余时间不足以前往"+MapInfo.mapRoomNum.get(finalMapRoom)
-                            +"\n您当前可以前往的房间有：\n"+list2String(canGoRoom));
+                            +"\r\n您当前可以前往的房间有：\r\n"+list2String(canGoRoom));
         } else {
-            return ApiResponse.ok("前往"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"需耗时："+timeCost+"分钟\n请合理分配时间");
+            return ApiResponse.ok("前往"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"需耗时："+timeCost+"分钟\r\n请合理分配时间");
+        }
+    }
+
+    @Override
+    public ApiResponse roleWalk(RoleWalkDTO walkInfo) {
+        int roleIdNum = Integer.parseInt(walkInfo.getRoleId());
+        long roomIdNum = Long.parseLong(walkInfo.getRoomId());
+        int toMapRoomNum = Integer.parseInt(walkInfo.getToMapRoom());
+        int roleIndex;
+        if (roleIdNum<=3) {
+            roleIndex=1;
+        } else {
+            roleIndex=2;
+        }
+
+        MapRole lastMapRole = mapRoleMapper.getLastMapRoom(roomIdNum, roleIdNum);
+        String lastMapRoom;
+        Integer timeCost;
+        Integer currentTime;
+        if (Objects.isNull(lastMapRole)) {
+            //从起点开始走的
+            lastMapRoom = MapInfo.roleStartPosition.get(walkInfo.getRoleId());
+            timeCost = MapInfo.mapRoomTimeCost.get(lastMapRoom).get(walkInfo.getToMapRoom());
+            currentTime = timeCost;
+        } else {
+            lastMapRoom = lastMapRole.getMapRoom().toString();
+            timeCost = MapInfo.mapRoomTimeCost.get(lastMapRoom).get(walkInfo.getToMapRoom());
+            currentTime = lastMapRole.getArrivedTime()+5+timeCost;
+        }
+        MapRole insertMapRole = new MapRole(null,roomIdNum,roleIdNum,currentTime,toMapRoomNum,roleIndex);
+        mapRoleMapper.insertMapRole(insertMapRole);
+
+        if (finalMapRoom.equals(walkInfo.getToMapRoom()) && (currentTime==55 || currentTime==60)) {
+            //当前角色走完路线，看其他角色是否走完
+            List<MapRole> mapRoleList = mapRoleMapper.getOtherRoleByRoomId(roomIdNum, roleIdNum);
+            Map<Integer, List<MapRole>> mapRoleMap =
+                    mapRoleList.stream().collect(Collectors.groupingBy(MapRole::getRoleId));
+            if (mapRoleMap.size()==5) {
+                boolean allFinished = true;
+                for (Map.Entry<Integer, List<MapRole>> entry : mapRoleMap.entrySet()) {
+                    lastMapRole = entry.getValue().stream().max(Comparator.comparing(MapRole::getArrivedTime)).get();
+                    if (!((lastMapRole.getArrivedTime()==55 || lastMapRole.getArrivedTime()==60) && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
+                        allFinished = false;
+                        break;
+                    }
+                }
+                if (allFinished) {
+                    mapRoomMapper.finishAllByRoomId(roomIdNum);
+                }
+            }
+            return ApiResponse.ok("已完成全部路线\r\n请点击‘查看线索‘查看您的信息");
+        } else {
+            return ApiResponse.ok("已抵达"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"，并完成搜查");
         }
     }
 

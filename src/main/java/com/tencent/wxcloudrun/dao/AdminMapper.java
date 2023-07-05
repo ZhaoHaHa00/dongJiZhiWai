@@ -24,5 +24,5 @@ public interface AdminMapper {
 
     Admin validOldItemNum(@Param("oldNum") String oldNum, @Param("newNum") String newNum);
 
-    Admin getAdminInfoById(@Param("id") Integer id);
+    Admin getAdminInfoById(@Param("id") Long id);
 }

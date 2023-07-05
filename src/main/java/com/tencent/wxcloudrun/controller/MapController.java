@@ -28,4 +28,9 @@ public class MapController {
     public ApiResponse getAllMapRoomInfo(){
         return mapService.getAllMapRoomInfo();
     }
+
+    @PostMapping("/role/walk")
+    public ApiResponse roleWalk(@RequestBody RoleWalkDTO walkDTO){
+        return mapService.roleWalk(walkDTO);
+    }
 }
