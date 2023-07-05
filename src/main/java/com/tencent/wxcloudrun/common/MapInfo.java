@@ -2,35 +2,44 @@ package com.tencent.wxcloudrun.common;
 
 import lombok.Data;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class MapInfo {
 
-    public static String role1 = "露西亚";
-    public static String role2 = "迪伦";
-    public static String role3 = "白茗";
-    public static String role4 = "罗德里克";
-    public static String role5 = "森";
-    public static String role6 = "卡尔";
+    public static final HashMap<String, String> roleInfo = new HashMap<String, String>(){
+        {
+            put("1", "露西亚");
+            put("2", "迪伦");
+            put("3", "白茗");
+            put("4", "罗德里克");
+            put("5", "森");
+            put("6", "卡尔");
+        }
+    };
 
-    public static String mapRoom1 = "杂物间";
-    public static String mapRoom2 = "锚链舱";
-    public static String mapRoom3 = "电力间";
-    public static String mapRoom4 = "休息室";
-    public static String mapRoom5 = "餐厅";
-    public static String mapRoom6 = "厨房";
-    public static String mapRoom7 = "储藏室1";
-    public static String mapRoom8 = "货仓1";
-    public static String mapRoom9 = "货仓2";
-    public static String mapRoom10 = "燃油舱";
-    public static String mapRoom11 = "备用清水仓";
-    public static String mapRoom12 = "压载水舱";
-    public static String mapRoom13 = "舵机舱";
-    public static String mapRoom14 = "储藏室2";
+    public static final HashMap<String, String> mapRoomNum = new HashMap<String, String>(){
+        {
+            put("1", "杂物间");
+            put("2", "锚链舱");
+            put("3", "电力间");
+            put("4", "休息室");
+            put("5", "餐厅");
+            put("6", "厨房");
+            put("7", "储藏室1");
+            put("8", "货仓1");
+            put("9", "货仓2");
+            put("10", "燃油舱");
+            put("11", "备用清水仓");
+            put("12", "压载水舱");
+            put("13", "舵机舱");
+            put("14", "储藏室2");
+        }
+    };
 
-    public static HashMap<String, List<String>> mapRoom = new HashMap<String, List<String>>(){
+    public static final HashMap<String, List<String>> mapRoom = new HashMap<String, List<String>>(){
         {
             put("mapRoom1_1", new ArrayList<String>(){
                 {
@@ -259,7 +268,7 @@ public class MapInfo {
         }
     };
 
-    public static HashMap<String, String> mapRoomClue = new HashMap<String, String>(){
+    public static final HashMap<String, String> mapRoomClue = new HashMap<String, String>(){
         {
             put("mapRoomClue1_1","鱼线，维修工具");
             put("mapRoomClue1_2","鱼线，维修工具");
@@ -276,7 +285,7 @@ public class MapInfo {
 
     };
 
-    public static HashMap<String, String> roleStartPosition = new HashMap<String, String>(){
+    public static final HashMap<String, String> roleStartPosition = new HashMap<String, String>(){
         {
             put("1","7");
             put("2","14");
