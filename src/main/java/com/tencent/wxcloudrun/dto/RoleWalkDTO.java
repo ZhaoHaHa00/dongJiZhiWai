@@ -9,6 +9,6 @@ public class RoleWalkDTO {
 
     private String roleId;
 
-    private String mapRoom;
+    private String toMapRoom;
 
 }

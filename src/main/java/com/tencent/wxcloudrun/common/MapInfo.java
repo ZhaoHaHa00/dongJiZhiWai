@@ -1,8 +1,5 @@
 package com.tencent.wxcloudrun.common;
 
-import lombok.Data;
-
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +33,29 @@ public class MapInfo {
             put("12", "压载水舱");
             put("13", "舵机舱");
             put("14", "储藏室2");
+        }
+    };
+
+    public static final HashMap<String, HashMap<String, Integer>> mapRoomTimeCost = new HashMap<String, HashMap<String, Integer>>(){
+        {
+            put("1",new HashMap<String, Integer>(){
+                {
+                    put("1",0);
+                    put("2",5);
+                    put("3",10);
+                    put("4",15);
+                    put("5",20);
+                    put("6",25);
+                    put("7",40);
+                    put("8",30);
+                    put("9",35);
+                    put("10",40);
+                    put("11",40);
+                    put("12",0);
+                    put("13",0);
+                    put("14",0);
+                }
+            });
         }
     };
 

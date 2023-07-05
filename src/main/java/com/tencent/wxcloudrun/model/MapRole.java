@@ -11,7 +11,7 @@ public class MapRole {
 
     private Integer roleId;
 
-    private Integer time;
+    private Integer arrivedTime;
 
     private Integer mapRoom;
 
