@@ -42,6 +42,7 @@ public class RoomServiceImpl implements RoomService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (Room room : roomList) {
             RoomVO roomVO = new RoomVO();
+            roomVO.setId(room.getId().toString());
             roomVO.setRoomNum(room.getRoomNum());
             roomVO.setCreatedTime(sdf.format(room.getCreatedTime()));
             resList.add(roomVO);
