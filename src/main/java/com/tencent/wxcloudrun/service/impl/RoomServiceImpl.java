@@ -108,7 +108,7 @@ public class RoomServiceImpl implements RoomService {
             List<Integer> allExistRoomNum = allMapRole.stream().map(MapRole::getMapRoom).distinct().collect(Collectors.toList());
             for (int i = 1; i<=14; i++) {
                 if (!allExistRoomNum.contains(i)) {
-                    String roomName = MapInfo.roleInfo.get(Integer.toString(i));
+                    String roomName = MapInfo.mapRoomNum.get(Integer.toString(i));
                     RoomDetailVO res = new RoomDetailVO();
                     res.setRoomName(roomName);
                     res.setGameClue("");
