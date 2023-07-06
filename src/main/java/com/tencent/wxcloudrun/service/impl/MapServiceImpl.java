@@ -218,7 +218,7 @@ public class MapServiceImpl implements MapService {
                         } else {
                             gameClue = mapClueList.get(roleNo-1);
                         }
-                        RoleClueVO res = new RoleClueVO(exploreTime,roomName, gameTool, gameClue);
+                        RoleClueVO res = new RoleClueVO(exploreTime,roomName, Objects.isNull(gameTool)?"":gameTool, gameClue);
                         resList.add(res);
                     }
                 }
