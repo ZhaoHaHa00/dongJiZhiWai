@@ -22,4 +22,8 @@
     <select id="getAllIndex" resultType="com.tencent.wxcloudrun.model.MapRole">
         SELECT roleId,arrivedTime,mapRoom FROM MapRole WHERE roomId=#{roomId} AND roleIndex=#{roleIndex}
     </select>
+
+    <select id="getAllByRoomId" parameterType="java.lang.Long" resultType="com.tencent.wxcloudrun.model.MapRole">
+        SELECT roleId,arrivedTime,mapRoom,roleIndex FROM MapRole WHERE roomId=#{roomId}
+    </select>
 </mapper>

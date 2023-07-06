@@ -1,6 +1,7 @@
 package com.tencent.wxcloudrun.service.impl;
 
 import com.tencent.wxcloudrun.common.MapInfo;
+import com.tencent.wxcloudrun.common.Utils;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.MapRoleMapper;
 import com.tencent.wxcloudrun.dao.MapRoomMapper;
@@ -200,7 +201,7 @@ public class MapServiceImpl implements MapService {
                         //计算玩家是第几个到的
                         int roleNo = allRoleInfoList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList())
                                 .indexOf(roleArrivedTime)+1;
-                        String exploreTime = getExploreTimeStr(roleInfo.getArrivedTime());
+                        String exploreTime = Utils.getExploreTimeStr(roleInfo.getArrivedTime());
                         String roomName = MapInfo.mapRoomNum.get(roleInfo.getMapRoom().toString());
                         String gameTool = null;
                         if (roleNo==1) {
@@ -256,32 +257,6 @@ public class MapServiceImpl implements MapService {
         return res.toString();
     }
 
-    private String getExploreTimeStr(Integer timeNum){
-        int finalTimeNum = timeNum+5;
-        StringBuilder res = new StringBuilder();
-        if (timeNum==60) {
-            return "9:00";
-        } else {
-            res.append("8:");
-            if (timeNum<10){
-                res.append("0").append(timeNum);
-            } else{
-                res.append(timeNum);
-            }
 
-            res.append("-");
-            if (finalTimeNum==60) {
-                res.append("9:00");
-            } else {
-                res.append("8:");
-                if (finalTimeNum<10){
-                    res.append("0").append(finalTimeNum);
-                } else{
-                    res.append(finalTimeNum);
-                }
-            }
-            return res.toString();
-        }
-    }
 
 }

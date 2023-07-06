@@ -33,4 +33,9 @@ public class RoomController {
     public ApiResponse validRoom(@Param("validNum")String validNum, @Param("roomNum")String roomNum){
         return roomService.validRoom(validNum, roomNum);
     }
+
+    @GetMapping("/detail")
+    public ApiResponse getRoomDetail(@Param("roomId")String roomId){
+        return roomService.getRoomDetail(roomId);
+    }
 }
