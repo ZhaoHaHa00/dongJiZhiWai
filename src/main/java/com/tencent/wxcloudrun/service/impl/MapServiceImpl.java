@@ -164,6 +164,7 @@ public class MapServiceImpl implements MapService {
         } else {
             return ApiResponse.ok("已抵达"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"，并完成搜查");
         }
+
     }
 
     private String list2String(List<String> canGoRoomNumList){
