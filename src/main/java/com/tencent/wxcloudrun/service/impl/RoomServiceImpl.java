@@ -104,6 +104,21 @@ public class RoomServiceImpl implements RoomService {
         handleDiffIndex(allMapRole1, resList, "1");
         handleDiffIndex(allMapRole2, resList, "2");
 
+        if (resList.size()!=14) {
+            List<Integer> allExistRoomNum = allMapRole.stream().map(MapRole::getMapRoom).distinct().collect(Collectors.toList());
+            for (int i = 1; i<=14; i++) {
+                if (!allExistRoomNum.contains(i)) {
+                    String roomName = MapInfo.roleInfo.get(Integer.toString(i));
+                    RoomDetailVO res = new RoomDetailVO();
+                    res.setRoomName(roomName);
+                    res.setGameClue("");
+                    res.setGameTool("");
+                    resList.add(res);
+                }
+            }
+        }
+
+        resList = resList.stream().sorted(Comparator.comparing(RoomDetailVO::getRoomName)).collect(Collectors.toList());
         return ApiResponse.ok(resList);
     }
 
