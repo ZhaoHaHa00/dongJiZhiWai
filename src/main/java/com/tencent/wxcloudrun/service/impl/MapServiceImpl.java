@@ -9,6 +9,8 @@ import com.tencent.wxcloudrun.model.MapRole;
 import com.tencent.wxcloudrun.model.MapRoom;
 import com.tencent.wxcloudrun.service.MapService;
 import com.tencent.wxcloudrun.vo.MapRoomVO;
+import com.tencent.wxcloudrun.vo.RoleClueVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +59,7 @@ public class MapServiceImpl implements MapService {
         } else {
             lastArrivedTime = lastMapRole.getArrivedTime();
             lastMapRoom = lastMapRole.getMapRoom();
-            if ((lastArrivedTime==60) || (lastArrivedTime+5==60)) {
+            if ((lastArrivedTime==60) || (lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
                 return ApiResponse.error("您的时间已耗尽，不可以前往任何地点\r\n请点击‘查看线索‘查看您的信息");
             }
         }
@@ -167,6 +169,73 @@ public class MapServiceImpl implements MapService {
 
     }
 
+    @Override
+    public ApiResponse getRoleClue(String roomId, String roleId) {
+        List<RoleClueVO> resList = new ArrayList<>();
+        Long roomIdNum = Long.valueOf(roomId);
+        Integer roleIdNum = Integer.valueOf(roleId);
+        MapRole lastMapRole = mapRoleMapper.getLastMapRoom(roomIdNum, roleIdNum);
+        if (Objects.isNull(lastMapRole)) {
+            return ApiResponse.error("请先完成全部路线");
+        }
+        int lastArrivedTime = lastMapRole.getArrivedTime();
+        if (lastArrivedTime!=60 && !(lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
+            return ApiResponse.error("请先完成全部路线");
+        }
+
+//        int state = mapRoomMapper.getStateByRoomId(roomIdNum);
+//        if (state==0) {
+//            return ApiResponse.error("请等待所有玩家完成路线");
+//        }
+
+        int roleIndex;
+        if (roleIdNum<=3) {
+            roleIndex = 1;
+        } else {
+            roleIndex = 2;
+        }
+
+        List<MapRole> allIndexInfo = mapRoleMapper.getAllIndex(roomIdNum, roleIndex);
+        Map<Integer, List<MapRole>> allRoomMap =
+                allIndexInfo.stream().collect(Collectors.groupingBy(MapRole::getMapRoom));
+        for (Map.Entry<Integer, List<MapRole>> entry : allRoomMap.entrySet()) {
+            Integer mapRoomNum = entry.getKey();
+            //当前房间所有玩家到达时间
+            List<MapRole> allRoleInfoList = entry.getValue();
+            for (MapRole roleInfo : allRoleInfoList) {
+                //玩家的信息
+                if (roleIdNum.equals(roleInfo.getRoleId())) {
+                    if (roleInfo.getArrivedTime() == 60) {
+                        RoleClueVO res = new RoleClueVO("9:00", MapInfo.mapRoomNum.get(finalMapRoom), "", "");
+                        resList.add(res);
+                    } else {
+                        int roleArrivedTime = roleInfo.getArrivedTime();
+                        //计算玩家是第几个到的
+                        int roleNo = allRoleInfoList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList())
+                                .indexOf(roleArrivedTime)+1;
+                        String exploreTime = getExploreTimeStr(roleInfo.getArrivedTime());
+                        String roomName = MapInfo.mapRoomNum.get(roleInfo.getMapRoom().toString());
+                        String gameTool = null;
+                        if (roleNo==1) {
+                            gameTool = MapInfo.mapRoomTool.get("mapRoomClue"+mapRoomNum+"_"+roleIndex);
+                        }
+                        List<String> mapClueList = MapInfo.mapRoomClue.get("mapRoom"+mapRoomNum+"_"+roleIndex);
+                        String gameClue;
+                        if (roleNo>mapClueList.size()+1) {
+                            gameClue = mapClueList.get(mapClueList.size()-1);
+                        } else {
+                            gameClue = mapClueList.get(roleNo-1);
+                        }
+                        RoleClueVO res = new RoleClueVO(exploreTime,roomName, Objects.isNull(gameTool)?"":gameTool,gameClue);
+                        resList.add(res);
+                    }
+                }
+            }
+            resList = resList.stream().sorted(Comparator.comparing(RoleClueVO::getExploreTime)).collect(Collectors.toList());
+        }
+        return ApiResponse.ok(resList);
+    }
+
     private String list2String(List<String> canGoRoomNumList){
         StringBuilder res = new StringBuilder();
         for (int i=0; i<canGoRoomNumList.size(); i++) {
@@ -178,6 +247,34 @@ public class MapServiceImpl implements MapService {
             }
         }
         return res.toString();
+    }
+
+    private String getExploreTimeStr(Integer timeNum){
+        int finalTimeNum = timeNum+5;
+        StringBuilder res = new StringBuilder();
+        if (timeNum==60) {
+            return "9:00";
+        } else {
+            res.append("8:");
+            if (timeNum<10){
+                res.append("0").append(timeNum);
+            } else{
+                res.append(timeNum);
+            }
+
+            res.append("-");
+            if (finalTimeNum==60) {
+                res.append("9:00");
+            } else {
+                res.append("8:");
+                if (finalTimeNum<10){
+                    res.append("0").append(finalTimeNum);
+                } else{
+                    res.append(finalTimeNum);
+                }
+            }
+            return res.toString();
+        }
     }
 
 }

@@ -18,4 +18,8 @@
     <select id="getOtherRoleByRoomId" resultType="com.tencent.wxcloudrun.model.MapRole">
         SELECT roleId,arrivedTime,mapRoom,roleIndex FROM MapRole WHERE roomId=#{roomId} AND roleId!=#{roleId}
     </select>
+
+    <select id="getAllIndex" resultType="com.tencent.wxcloudrun.model.MapRole">
+        SELECT roleId,arrivedTime,mapRoom FROM MapRole WHERE roomId=#{roomId} AND roleIndex=#{roleIndex}
+    </select>
 </mapper>

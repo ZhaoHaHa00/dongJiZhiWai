@@ -33,4 +33,9 @@ public class MapController {
     public ApiResponse roleWalk(@RequestBody RoleWalkDTO walkDTO){
         return mapService.roleWalk(walkDTO);
     }
+
+    @GetMapping("/role/clue")
+    public ApiResponse getRoleClue(@Param("roomId")String roomId, @Param("")String roleId){
+        return mapService.getRoleClue(roomId, roleId);
+    }
 }

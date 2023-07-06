@@ -16,4 +16,6 @@ public interface MapRoleMapper {
     void insertMapRole(@Param("mapRole")MapRole mapRole);
 
     List<MapRole> getOtherRoleByRoomId(@Param("roomId")Long roomId, @Param("roleId") Integer roleId);
+
+    List<MapRole> getAllIndex(@Param("roomId")Long roomId, @Param("roleIndex")Integer roleIndex);
 }

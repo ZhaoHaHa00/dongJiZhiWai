@@ -293,7 +293,7 @@ public class MapInfo {
         }
     };
 
-    public static final HashMap<String, List<String>> mapRoom = new HashMap<String, List<String>>(){
+    public static final HashMap<String, List<String>> mapRoomClue = new HashMap<String, List<String>>(){
         {
             put("mapRoom1_1", new ArrayList<String>(){
                 {
@@ -522,7 +522,7 @@ public class MapInfo {
         }
     };
 
-    public static final HashMap<String, String> mapRoomClue = new HashMap<String, String>(){
+    public static final HashMap<String, String> mapRoomTool = new HashMap<String, String>(){
         {
             put("mapRoomClue1_1","鱼线，维修工具");
             put("mapRoomClue1_2","鱼线，维修工具");
