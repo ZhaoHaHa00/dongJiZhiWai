@@ -132,8 +132,10 @@ public class RoomServiceImpl implements RoomService {
 
             List<MapRole> roomRoleList =
                     entry.getValue().stream().sorted(Comparator.comparing(MapRole::getArrivedTime)).collect(Collectors.toList());
-            MapRole earlyMapRole = roomRoleList.get(0);
-            String toolRoleName = MapInfo.roleInfo.get(earlyMapRole.getRoleId().toString());
+            List<Integer> arrivedTimeSortedList = roomRoleList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList());
+            ;
+            MapRole toolMapRole = roomRoleList.get(Utils.getToolRoleNo(arrivedTimeSortedList)-1);
+            String toolRoleName = MapInfo.roleInfo.get(toolMapRole.getRoleId().toString());
             String toolName = MapInfo.mapRoomTool.get("mapRoomClue"+mapRoomNum+"_"+roleIndex);
             if (StringUtils.isEmpty(toolName)) {
                 res.setGameTool("");

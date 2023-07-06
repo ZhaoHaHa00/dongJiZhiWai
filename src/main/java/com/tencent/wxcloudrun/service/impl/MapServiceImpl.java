@@ -198,15 +198,19 @@ public class MapServiceImpl implements MapService {
                         resList.add(res);
                     } else {
                         int roleArrivedTime = roleInfo.getArrivedTime();
+                        List<Integer> arrivedTimeSortedList =
+                                allRoleInfoList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList());
                         //计算玩家是第几个到的
-                        int roleNo = allRoleInfoList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList())
-                                .indexOf(roleArrivedTime)+1;
+                        int roleNo = arrivedTimeSortedList.indexOf(roleArrivedTime)+1;
+                        //耗时
                         String exploreTime = Utils.getExploreTimeStr(roleInfo.getArrivedTime());
+                        //房间名
                         String roomName = MapInfo.mapRoomNum.get(roleInfo.getMapRoom().toString());
-                        String gameTool = null;
-                        if (roleNo==1) {
+                        String gameTool = "";
+                        if (roleNo==Utils.getToolRoleNo(arrivedTimeSortedList)) {
                             gameTool = MapInfo.mapRoomTool.get("mapRoomClue"+mapRoomNum+"_"+roleIndex);
                         }
+                        //判断拿到的线索
                         List<String> mapClueList = MapInfo.mapRoomClue.get("mapRoom"+mapRoomNum+"_"+roleIndex);
                         String gameClue;
                         if (roleNo>mapClueList.size()+1) {
@@ -214,7 +218,7 @@ public class MapServiceImpl implements MapService {
                         } else {
                             gameClue = mapClueList.get(roleNo-1);
                         }
-                        RoleClueVO res = new RoleClueVO(exploreTime,roomName, Objects.isNull(gameTool)?"":gameTool,gameClue);
+                        RoleClueVO res = new RoleClueVO(exploreTime,roomName, gameTool, gameClue);
                         resList.add(res);
                     }
                 }

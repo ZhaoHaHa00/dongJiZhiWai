@@ -1,5 +1,7 @@
 package com.tencent.wxcloudrun.common;
 
+import java.util.List;
+
 public class Utils {
 
     public static String getExploreTimeStr(Integer timeNum){
@@ -28,5 +30,15 @@ public class Utils {
             }
             return res.toString();
         }
+    }
+
+    public static int getToolRoleNo(List<Integer> arrivedTimeSortedList){
+        for (int i=1; i<=arrivedTimeSortedList.size(); i++) {
+            Integer arrivedTime = arrivedTimeSortedList.get(i-1);
+            if (arrivedTimeSortedList.stream().filter(e->e.equals(arrivedTime)).count()==1) {
+                return i;
+            }
+        }
+        return 0;
     }
 }
