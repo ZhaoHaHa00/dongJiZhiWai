@@ -174,19 +174,6 @@ public class MapServiceImpl implements MapService {
         List<RoleClueVO> resList = new ArrayList<>();
         Long roomIdNum = Long.valueOf(roomId);
         Integer roleIdNum = Integer.valueOf(roleId);
-        MapRole lastMapRole = mapRoleMapper.getLastMapRoom(roomIdNum, roleIdNum);
-        if (Objects.isNull(lastMapRole)) {
-            return ApiResponse.error("请先完成全部路线");
-        }
-        int lastArrivedTime = lastMapRole.getArrivedTime();
-        if (lastArrivedTime!=60 && !(lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
-            return ApiResponse.error("请先完成全部路线");
-        }
-
-//        int state = mapRoomMapper.getStateByRoomId(roomIdNum);
-//        if (state==0) {
-//            return ApiResponse.error("请等待所有玩家完成路线");
-//        }
 
         int roleIndex;
         if (roleIdNum<=3) {
@@ -234,6 +221,26 @@ public class MapServiceImpl implements MapService {
             resList = resList.stream().sorted(Comparator.comparing(RoleClueVO::getExploreTime)).collect(Collectors.toList());
         }
         return ApiResponse.ok(resList);
+    }
+
+    @Override
+    public ApiResponse validRoleClue(String roomId, String roleId) {
+        Long roomIdNum = Long.valueOf(roomId);
+        Integer roleIdNum = Integer.valueOf(roleId);
+        MapRole lastMapRole = mapRoleMapper.getLastMapRoom(roomIdNum, roleIdNum);
+        if (Objects.isNull(lastMapRole)) {
+            return ApiResponse.error("请先完成全部路线");
+        }
+        int lastArrivedTime = lastMapRole.getArrivedTime();
+        if (lastArrivedTime!=60 && !(lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
+            return ApiResponse.error("请先完成全部路线");
+        }
+
+//        int state = mapRoomMapper.getStateByRoomId(roomIdNum);
+//        if (state==0) {
+//            return ApiResponse.error("请等待所有玩家完成路线");
+//        }
+        return ApiResponse.ok();
     }
 
     private String list2String(List<String> canGoRoomNumList){

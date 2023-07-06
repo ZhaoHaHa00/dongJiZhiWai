@@ -16,4 +16,6 @@ public interface MapService {
     ApiResponse roleWalk(RoleWalkDTO walkInfo);
 
     ApiResponse getRoleClue(String roomId, String roleId);
+
+    ApiResponse validRoleClue(String roomId, String roleId);
 }
