@@ -16,11 +16,9 @@ import com.tencent.wxcloudrun.vo.RoomVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Handler;
 import java.util.stream.Collectors;
 
 @Service
@@ -152,4 +150,14 @@ public class RoomServiceImpl implements RoomService {
             resList.add(res);
         }
     }
+
+    //生成船长路线
+    private void buildCaptainRoute(List<String> captainRoute, List<MapRole> allRoleInfo){
+        //生成一个时间点-mapRoleList的map
+        Map<Integer, List<MapRole>> timeMapRoleMap =
+                allRoleInfo.stream().collect(Collectors.groupingBy(MapRole::getArrivedTime));
+        //角色到达时间及到达时间后的5分钟都算作在当前房间，重构map
+    }
+
+    private void rebuildTimeMapRole(Map<Integer, List<MapRole>> timeMapRoleMap){}
 }

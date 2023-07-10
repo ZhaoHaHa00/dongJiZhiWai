@@ -66,6 +66,9 @@ public class MapServiceImpl implements MapService {
         }
         //当前玩家选中房间耗时
         Integer timeCost = MapInfo.mapRoomTimeCost.get(lastMapRoom.toString()).get(walkInfo.getToMapRoom());
+        if (timeCost==0) {
+            return ApiResponse.error("时间宝贵，请不要在原地不动");
+        }
         //到达当前选中房间后前往终点耗时
         Integer finalTimeCost;
         //两次路程总耗时
@@ -241,10 +244,10 @@ public class MapServiceImpl implements MapService {
             return ApiResponse.error("请先完成全部路线");
         }
 
-//        int state = mapRoomMapper.getStateByRoomId(roomIdNum);
-//        if (state==0) {
-//            return ApiResponse.error("请等待所有玩家完成路线");
-//        }
+        int state = mapRoomMapper.getStateByRoomId(roomIdNum);
+        if (state==0) {
+            return ApiResponse.error("请等待所有玩家完成路线");
+        }
         return ApiResponse.ok();
     }
 
