@@ -14,6 +14,7 @@ import com.tencent.wxcloudrun.service.RoomService;
 import com.tencent.wxcloudrun.vo.RoomDetailVO;
 import com.tencent.wxcloudrun.vo.RoomVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -131,14 +132,18 @@ public class RoomServiceImpl implements RoomService {
             List<MapRole> roomRoleList =
                     entry.getValue().stream().sorted(Comparator.comparing(MapRole::getArrivedTime)).collect(Collectors.toList());
             List<Integer> arrivedTimeSortedList = roomRoleList.stream().map(MapRole::getArrivedTime).collect(Collectors.toList());
-            ;
-            MapRole toolMapRole = roomRoleList.get(Utils.getToolRoleNo(arrivedTimeSortedList)-1);
-            String toolRoleName = MapInfo.roleInfo.get(toolMapRole.getRoleId().toString());
-            String toolName = MapInfo.mapRoomTool.get("mapRoomClue"+mapRoomNum+"_"+roleIndex);
-            if (StringUtils.isEmpty(toolName)) {
+            int toolRoleNo = Utils.getToolRoleNo(arrivedTimeSortedList);
+            if (toolRoleNo==0) {
                 res.setGameTool("");
             } else {
-                res.setGameTool(toolRoleName+"获得了\n"+toolName);
+                MapRole toolMapRole = roomRoleList.get(toolRoleNo-1);
+                String toolRoleName = MapInfo.roleInfo.get(toolMapRole.getRoleId().toString());
+                String toolName = MapInfo.mapRoomTool.get("mapRoomClue"+mapRoomNum+"_"+roleIndex);
+                if (StringUtils.isEmpty(toolName)) {
+                    res.setGameTool("");
+                } else {
+                    res.setGameTool(toolRoleName+"获得了\n"+toolName);
+                }
             }
 
             StringBuilder gameClueSb = new StringBuilder();
@@ -157,7 +162,29 @@ public class RoomServiceImpl implements RoomService {
         Map<Integer, List<MapRole>> timeMapRoleMap =
                 allRoleInfo.stream().collect(Collectors.groupingBy(MapRole::getArrivedTime));
         //角色到达时间及到达时间后的5分钟都算作在当前房间，重构map
+        timeMapRoleMap = rebuildTimeMapRole(timeMapRoleMap);
     }
 
-    private void rebuildTimeMapRole(Map<Integer, List<MapRole>> timeMapRoleMap){}
+    private Map<Integer, List<MapRole>> rebuildTimeMapRole(Map<Integer, List<MapRole>> timeMapRoleMap){
+        Map<Integer, List<MapRole>> exploreTimeRoleMap = new HashMap<>(timeMapRoleMap);
+        for (Map.Entry<Integer, List<MapRole>> entry : timeMapRoleMap.entrySet()) {
+            Integer currentTime = entry.getKey();
+            if (currentTime==60) {
+                continue;
+            }
+            List<MapRole> currentTimeRoleList = entry.getValue();
+            for (MapRole currentTimeRole : currentTimeRoleList) {
+                MapRole exploreTimeRole = new MapRole();
+                BeanUtils.copyProperties(currentTimeRole, exploreTimeRole);
+                exploreTimeRole.setArrivedTime(currentTimeRole.getArrivedTime()+5);
+                List<MapRole> exploreTimeRoleList = exploreTimeRoleMap.get(currentTime+5);
+                if (Objects.isNull(exploreTimeRoleList)) {
+                    exploreTimeRoleList = new ArrayList<>();
+                }
+                exploreTimeRoleList.add(exploreTimeRole);
+                exploreTimeRoleMap.put(currentTime+5, exploreTimeRoleList);
+            }
+        }
+        return exploreTimeRoleMap;
+    }
 }

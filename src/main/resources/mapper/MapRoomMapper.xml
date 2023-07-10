@@ -4,7 +4,7 @@
 
     <insert id="insertMapRoom" parameterType="java.lang.Long">
         INSERT INTO MapRoom(roomId,mapRoomState)
-        VALUES(#{mapRoom.roomId},0,0)
+        VALUES(#{roomId},0)
     </insert>
 
     <delete id="deleteByRoomId" parameterType="java.lang.Long">

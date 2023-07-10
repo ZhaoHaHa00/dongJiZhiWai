@@ -95,6 +95,9 @@ public class MapServiceImpl implements MapService {
             for (Map.Entry<String, Integer> entry : goMap.entrySet()) {
                 toRoom = entry.getKey();
                 timeCost = entry.getValue();
+                if (timeCost==0) {
+                    continue;
+                }
                 if (finalMapRoom.equals(toRoom)) {
                     //如果前往终点可以不算搜索时间
                     currentArrivedTime = lastArrivedTime+5+timeCost;
