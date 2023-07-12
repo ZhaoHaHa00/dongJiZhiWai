@@ -14,9 +14,13 @@ import com.tencent.wxcloudrun.vo.RoomVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.xml.transform.Source;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static com.tencent.wxcloudrun.common.Utils.captainName;
 
 @Service
@@ -97,6 +101,7 @@ public class RoomServiceImpl implements RoomService {
         List<MapRole> allMapRole = mapRoleMapper.getAllByRoomId(Long.valueOf(roomId));
         handleCaptainRoute(resList);
         handleRoleRoute(allMapRole, resList);
+        handleGameTool(allMapRole, resList);
 
 //        List<MapRole> allMapRole1 = allMapRole.stream().filter(e->e.getRoleIndex()==1).collect(Collectors.toList());
 //        List<MapRole> allMapRole2 = allMapRole.stream().filter(e->e.getRoleIndex()==2).collect(Collectors.toList());
@@ -151,9 +156,28 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
-//    private void handleGameTool(List<MapRole> allMapRole, List<List<String>> resList){
-//        MapInfo
-//    }
+    private void handleGameTool(List<MapRole> allMapRole, List<List<String>> resList){
+        for (Map.Entry<String, String> entry : MapInfo.mapRoomTool.entrySet()) {
+            String toolWholeName = entry.getKey();
+            String toolRoomStr = toolWholeName.substring(11, toolWholeName.indexOf("_"));
+            String toolIndexStr = toolWholeName.substring(toolWholeName.indexOf("_")+1, toolWholeName.length());
+            int toolRoomNum = Integer.parseInt(toolRoomStr);
+            int toolIndexNum = Integer.parseInt(toolIndexStr);
+            List<MapRole> toolRoomRoleList = allMapRole.stream()
+                    .filter(e->e.getMapRoom()==toolRoomNum && e.getRoleIndex()==toolIndexNum).sorted(Comparator.comparing(MapRole::getArrivedTime)).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(toolRoomRoleList)) {
+                List<Integer> arrivedTimeSortedList =
+                        toolRoomRoleList.stream().map(MapRole::getArrivedTime).sorted().collect(Collectors.toList());
+                int toolRoleNo = Utils.getToolRoleNo(arrivedTimeSortedList);
+                if (toolRoleNo!=0) {
+                    MapRole toolRole = toolRoomRoleList.get(toolRoleNo-1);
+                    List<String> timeMapRoomList = resList.get(toolRole.getArrivedTime()/5+1);
+                    int index = toolRole.getMapRoom()-1;
+                    timeMapRoomList.set(index, timeMapRoomList.get(index)+MapInfo.roleInfo.get(toolRole.getRoleId().toString())+"获得了"+entry.getValue());
+                }
+            }
+        }
+    }
 
 //    private void handleDiffIndex(List<MapRole> allMapRole, List<RoomDetailVO> resList, String roleIndex){
 //        Map<Integer,List<MapRole>> allRoleMap = allMapRole.stream().collect(Collectors.groupingBy(MapRole::getMapRoom));
