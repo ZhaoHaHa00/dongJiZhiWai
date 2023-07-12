@@ -550,4 +550,20 @@ public class MapInfo {
         }
     };
 
+    public static final HashMap<Integer, List<Integer>> captainRoute = new HashMap<Integer, List<Integer>>(){
+        {
+            put(0,new ArrayList<Integer>(){{add(12);add(11);}});
+            put(1,new ArrayList<Integer>(){{add(11);}});
+            put(4,new ArrayList<Integer>(){{add(10);}});
+            put(5,new ArrayList<Integer>(){{add(10);add(9);}});
+            put(6,new ArrayList<Integer>(){{add(9);add(7);}});
+            put(7,new ArrayList<Integer>(){{add(7);add(14);}});
+            put(8,new ArrayList<Integer>(){{add(14);}});
+            put(9,new ArrayList<Integer>(){{add(9);}});
+            put(10,new ArrayList<Integer>(){{add(9);add(8);}});
+            put(11,new ArrayList<Integer>(){{add(8);add(9);}});
+            put(12,new ArrayList<Integer>(){{add(9);}});
+        }
+    };
+
 }

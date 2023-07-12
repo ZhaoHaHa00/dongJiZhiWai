@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.tencent.wxcloudrun.common.Utils.finalMapRoom;
+
 @Service
 public class MapServiceImpl implements MapService {
-
-    private final String finalMapRoom = "9";
 
     @Autowired
     private MapRoleMapper mapRoleMapper;
@@ -66,9 +66,6 @@ public class MapServiceImpl implements MapService {
         }
         //当前玩家选中房间耗时
         Integer timeCost = MapInfo.mapRoomTimeCost.get(lastMapRoom.toString()).get(walkInfo.getToMapRoom());
-        if (timeCost==0) {
-            return ApiResponse.error("时间宝贵，请不要在原地不动");
-        }
         //到达当前选中房间后前往终点耗时
         Integer finalTimeCost;
         //两次路程总耗时

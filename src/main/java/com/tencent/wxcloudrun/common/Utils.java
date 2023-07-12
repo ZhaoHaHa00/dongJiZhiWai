@@ -4,6 +4,9 @@ import java.util.List;
 
 public class Utils {
 
+    public static final String finalMapRoom = "9";
+    public static final String captainName = "船长";
+
     public static String getExploreTimeStr(Integer timeNum){
         int finalTimeNum = timeNum+5;
         StringBuilder res = new StringBuilder();
