@@ -146,9 +146,14 @@ public class RoomServiceImpl implements RoomService {
     private void handleRoleRoute(List<MapRole> allMapRole, List<List<String>> resList){
         for (MapRole mapRole : allMapRole) {
             List<String> timeMapRoomList = resList.get(mapRole.getArrivedTime()/5+1);
-            timeMapRoomList.set(mapRole.getMapRoom()-1, MapInfo.roleInfo.get(mapRole.getRoleId().toString())+"\r\n");
+            int index = mapRole.getMapRoom()-1;
+            timeMapRoomList.set(index, timeMapRoomList.get(index)+MapInfo.roleInfo.get(mapRole.getRoleId().toString())+"\r\n");
         }
     }
+
+//    private void handleGameTool(List<MapRole> allMapRole, List<List<String>> resList){
+//        MapInfo
+//    }
 
 //    private void handleDiffIndex(List<MapRole> allMapRole, List<RoomDetailVO> resList, String roleIndex){
 //        Map<Integer,List<MapRole>> allRoleMap = allMapRole.stream().collect(Collectors.groupingBy(MapRole::getMapRoom));
