@@ -12,7 +12,7 @@ public interface AdminMapper {
 
     Admin getAdminInfo(@Param("loginDTO") LoginDTO loginDTO);
 
-    List<Admin> getAllAdmin();
+    List<Admin> getAllAdmin(@Param("storeName")String storeName, @Param("city")String city);
 
     void insertAdmin(@Param("admin")Admin admin);
 

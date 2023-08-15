@@ -5,7 +5,7 @@ import com.tencent.wxcloudrun.model.Admin;
 
 public interface AdminService {
 
-    ApiResponse getAllAdmin();
+    ApiResponse getAllAdmin(String storeName, String city);
 
     ApiResponse updateAdmin(Admin admin);
 

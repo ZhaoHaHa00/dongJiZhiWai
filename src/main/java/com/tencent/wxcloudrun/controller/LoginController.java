@@ -32,8 +32,9 @@ public class LoginController {
     }
 
     @GetMapping("/all")
-    public ApiResponse getAllAdmin(){
-        return adminService.getAllAdmin();
+    public ApiResponse getAllAdmin(@RequestParam(required = false)String storeName,
+                                   @RequestParam(required = false)String city){
+        return adminService.getAllAdmin(storeName, city);
     }
 
     @PostMapping("/update")

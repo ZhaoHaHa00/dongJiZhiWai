@@ -4,6 +4,7 @@ import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dao.AdminMapper;
 import com.tencent.wxcloudrun.model.Admin;
 import com.tencent.wxcloudrun.service.AdminService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ public class AdminServiceImpl implements AdminService {
     private AdminMapper adminMapper;
 
     @Override
-    public ApiResponse getAllAdmin() {
-        List<Admin> adminList = adminMapper.getAllAdmin();
+    public ApiResponse getAllAdmin(String storeName, String city) {
+        List<Admin> adminList = adminMapper.getAllAdmin(storeName, city);
         for (Admin admin : adminList) {
             if (Objects.isNull(admin.getCity())) {
                 Admin validItem = adminMapper.validNewItemNum(admin.getValidNum());

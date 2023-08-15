@@ -7,7 +7,14 @@
     </select>
 
     <select id="getAllAdmin" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT * FROM Admin WHERE username!='admin' ORDER BY validNum ASC
+        SELECT * FROM Admin WHERE username!='admin'
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(storeName)">
+            AND storeName like CONCAT("%",#{storeName}, "%")
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(city)">
+            AND city like CONCAT("%",#{city}, "%")
+        </if>
+        ORDER BY validNum ASC
     </select>
 
     <insert id="insertAdmin" parameterType="com.tencent.wxcloudrun.model.Admin">
