@@ -11,6 +11,7 @@ import com.tencent.wxcloudrun.model.MapRoom;
 import com.tencent.wxcloudrun.service.MapService;
 import com.tencent.wxcloudrun.vo.MapRoomVO;
 import com.tencent.wxcloudrun.vo.RoleClueVO;
+import com.tencent.wxcloudrun.vo.RolePositionVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,25 @@ public class MapServiceImpl implements MapService {
     @Override
     public ApiResponse getRolePosition(String roomId, String roleId) {
         MapRole mapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(roomId), Integer.valueOf(roleId));
+
+        String mapRoomNum;
+        String mapRoomName;
+        String currentTime;
         if (Objects.isNull(mapRole)) {
-            return ApiResponse.ok("room"+MapInfo.roleStartPosition.get(roleId));
+            mapRoomNum = MapInfo.roleStartPosition.get(roleId);
+            currentTime = "8:00";
         } else {
-            return ApiResponse.ok("room"+mapRole.getMapRoom());
+            mapRoomNum = mapRole.getMapRoom().toString();
+            currentTime = Utils.getCurrentTime(mapRole.getArrivedTime());
         }
+
+        mapRoomName = MapInfo.mapRoomNum.get(mapRoomNum);
+        RolePositionVO rolePositionVO = new RolePositionVO();
+        rolePositionVO.setRoleName(mapRoomName);
+        rolePositionVO.setRoleNum("room"+mapRoomNum+"role");
+        rolePositionVO.setCurrentTime(currentTime);
+
+        return ApiResponse.ok(rolePositionVO);
     }
 
     @Override
@@ -61,7 +76,7 @@ public class MapServiceImpl implements MapService {
             lastArrivedTime = lastMapRole.getArrivedTime();
             lastMapRoom = lastMapRole.getMapRoom();
             if ((lastArrivedTime==60) || (lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
-                return ApiResponse.error("您的时间已耗尽，不可以前往任何地点\r\n请点击‘查看线索‘查看您的信息");
+                return ApiResponse.error("您的时间已耗尽，不可以前往任何地点\r\n请点击右上角‘查看线索‘查看您的信息");
             }
         }
         //当前玩家选中房间耗时
@@ -166,7 +181,7 @@ public class MapServiceImpl implements MapService {
                     mapRoomMapper.finishAllByRoomId(roomIdNum);
                 }
             }
-            return ApiResponse.ok("已完成全部路线\r\n请点击‘查看线索‘查看您的信息");
+            return ApiResponse.ok("已完成全部路线\r\n请点击右上角‘查看线索‘查看您的信息");
         } else {
             return ApiResponse.ok("已抵达"+MapInfo.mapRoomNum.get(walkInfo.getToMapRoom())+"，并完成搜查");
         }

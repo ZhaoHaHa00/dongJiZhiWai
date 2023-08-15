@@ -35,6 +35,24 @@ public class Utils {
         }
     }
 
+    public static String getCurrentTime(Integer timeNum){
+
+        StringBuilder res = new StringBuilder();
+        if (timeNum==60 || timeNum==55) {
+            return "9:00";
+        } else {
+            Integer afterExploreTime = timeNum+5;
+            res.append("8:");
+            if (afterExploreTime<10){
+                res.append("0").append(afterExploreTime);
+            } else{
+                res.append(afterExploreTime);
+            }
+
+            return res.toString();
+        }
+    }
+
     public static int getToolRoleNo(List<Integer> arrivedTimeSortedList){
         for (int i=1; i<=arrivedTimeSortedList.size(); i++) {
             Integer arrivedTime = arrivedTimeSortedList.get(i-1);
