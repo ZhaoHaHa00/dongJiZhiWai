@@ -269,8 +269,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public ApiResponse validSingleClue(String roomId, String roleId) {
         MapRole mapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(roomId), Integer.valueOf(roleId));
-        Integer arrivedTime = mapRole.getArrivedTime();
-        if (arrivedTime==55 || arrivedTime==60) {
+
+        if (Objects.nonNull(mapRole) && (mapRole.getArrivedTime()==55 || mapRole.getArrivedTime()==60)) {
             return ApiResponse.ok();
         }
         return ApiResponse.error("no");
