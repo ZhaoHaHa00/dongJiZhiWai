@@ -266,6 +266,16 @@ public class MapServiceImpl implements MapService {
         return ApiResponse.ok();
     }
 
+    @Override
+    public ApiResponse validSingleClue(String roomId, String roleId) {
+        MapRole mapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(roomId), Integer.valueOf(roleId));
+        Integer arrivedTime = mapRole.getArrivedTime();
+        if (arrivedTime==55 || arrivedTime==60) {
+            return ApiResponse.ok();
+        }
+        return ApiResponse.error("no");
+    }
+
     private String list2String(List<String> canGoRoomNumList){
         StringBuilder res = new StringBuilder();
         for (int i=0; i<canGoRoomNumList.size(); i++) {

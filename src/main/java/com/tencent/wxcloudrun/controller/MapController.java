@@ -43,4 +43,9 @@ public class MapController {
     public ApiResponse validRoleClue(@Param("roomId")String roomId, @Param("")String roleId) {
         return mapService.validRoleClue(roomId, roleId);
     }
+
+    @GetMapping("/single/clue/valid")
+    public ApiResponse validSingleClue(@Param("roomId")String roomId, @Param("roleId")String roleId){
+        return mapService.validSingleClue(roomId, roleId);
+    }
 }

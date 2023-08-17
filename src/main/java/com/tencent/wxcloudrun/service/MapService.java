@@ -18,4 +18,6 @@ public interface MapService {
     ApiResponse getRoleClue(String roomId, String roleId);
 
     ApiResponse validRoleClue(String roomId, String roleId);
+
+    ApiResponse validSingleClue(String roomId, String roleId);
 }
