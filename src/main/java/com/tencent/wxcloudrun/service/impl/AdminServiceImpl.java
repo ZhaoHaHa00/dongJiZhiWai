@@ -42,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
             if (!CollectionUtils.isEmpty(validItemList)){
                 Admin validItem = validItemList.get(0);
                 if (admin.getUsername().equals(validItem.getUsername())) {
-                    return ApiResponse.error("账号已存在");
+                    return ApiResponse.error("用户名已存在");
                 }
                 if (admin.getValidNum().equals(validItem.getValidNum())) {
                     return ApiResponse.error("编号已存在");
@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
                     return ApiResponse.error("用户名已存在");
                 }
                 if (admin.getValidNum().equals(validItem.getValidNum())) {
-                    return ApiResponse.error("用户名已存在");
+                    return ApiResponse.error("编号已存在");
                 }
             }
 
