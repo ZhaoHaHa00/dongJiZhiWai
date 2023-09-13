@@ -20,9 +20,9 @@ public interface AdminMapper {
 
     void deleteAdmin(@Param("id") Integer id);
 
-    Admin validNewItem(@Param("validNum") String validNum, @Param("username")String username);
+    List<Admin> validNewItem(@Param("validNum") String validNum, @Param("username")String username);
 
-    Admin validOldItem(@Param("oldNum") String oldNum, @Param("newNum") String newNum, @Param("oldUsername")String oldUsername,
+    List<Admin> validOldItem(@Param("oldNum") String oldNum, @Param("newNum") String newNum, @Param("oldUsername")String oldUsername,
                        @Param("newUsername")String newUsername);
 
     Admin getAdminInfoById(@Param("id") Long id);

@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.service.AdminService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,8 +38,9 @@ public class AdminServiceImpl implements AdminService {
         admin.setType(2);
         if (Objects.isNull(admin.getId())) {
 
-            Admin validItem = adminMapper.validNewItem(admin.getValidNum(), admin.getUsername());
-            if (Objects.nonNull(validItem)){
+            List<Admin> validItemList = adminMapper.validNewItem(admin.getValidNum(), admin.getUsername());
+            if (!CollectionUtils.isEmpty(validItemList)){
+                Admin validItem = validItemList.get(0);
                 if (admin.getUsername().equals(validItem.getUsername())) {
                     return ApiResponse.error("账号已存在");
                 }
@@ -51,14 +53,15 @@ public class AdminServiceImpl implements AdminService {
         } else {
 
             Admin oldItem = adminMapper.getAdminInfoById(admin.getId());
-            Admin validItem = adminMapper.validOldItem(oldItem.getValidNum(), admin.getValidNum(),
+            List<Admin> validItemList = adminMapper.validOldItem(oldItem.getValidNum(), admin.getValidNum(),
                     oldItem.getUsername(), admin.getUsername());
-            if (Objects.nonNull(validItem)){
+            if (!CollectionUtils.isEmpty(validItemList)){
+                Admin validItem = validItemList.get(0);
                 if (admin.getUsername().equals(validItem.getUsername())) {
-                    return ApiResponse.error("账号已存在");
+                    return ApiResponse.error("用户名已存在");
                 }
                 if (admin.getValidNum().equals(validItem.getValidNum())) {
-                    return ApiResponse.error("编号已存在");
+                    return ApiResponse.error("用户名已存在");
                 }
             }
 

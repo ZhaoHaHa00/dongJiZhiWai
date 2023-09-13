@@ -32,12 +32,12 @@
         DELETE FROM Admin WHERE ID=#{id}
     </delete>
 
-    <select id="validNewItemNum" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT validNum FROM Admin WHERE validNum=#{validNum} OR username=#{username}
+    <select id="validNewItem" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT username,validNum FROM Admin WHERE validNum=#{validNum} OR username=#{username}
     </select>
 
-    <select id="validOldItemNum" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT validNum FROM Admin WHERE (validNum=#{newNum} AND validNum!=#{oldNum})
+    <select id="validOldItem" resultType="com.tencent.wxcloudrun.model.Admin">
+        SELECT username,validNum FROM Admin WHERE (validNum=#{newNum} AND validNum!=#{oldNum})
                                       OR (username=#{newUsername} AND username!=#{oldUsername})
     </select>
 
