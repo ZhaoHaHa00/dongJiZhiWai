@@ -7,7 +7,9 @@ import com.tencent.wxcloudrun.model.Admin;
 import com.tencent.wxcloudrun.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -18,11 +20,12 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ApiResponse login(LoginDTO loginDTO) {
-        Admin admin = adminMapper.getAdminInfo(loginDTO);
-        if (Objects.isNull(admin)) {
+        List<Admin> adminList = adminMapper.getAdminInfo(loginDTO);
+        if (CollectionUtils.isEmpty(adminList)) {
             return ApiResponse.error("0");
         }
 
+        Admin admin = adminList.get(0);
         return ApiResponse.ok(admin.getType().toString(), admin);
     }
 }

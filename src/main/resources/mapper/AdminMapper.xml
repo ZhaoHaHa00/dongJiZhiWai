@@ -33,11 +33,12 @@
     </delete>
 
     <select id="validNewItemNum" parameterType="java.lang.String" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT validNum FROM Admin WHERE validNum=#{validNum}
+        SELECT validNum FROM Admin WHERE validNum=#{validNum} OR username=#{username}
     </select>
 
     <select id="validOldItemNum" resultType="com.tencent.wxcloudrun.model.Admin">
-        SELECT validNum FROM Admin WHERE validNum=#{newNum} AND validNum!=#{oldNum}
+        SELECT validNum FROM Admin WHERE (validNum=#{newNum} AND validNum!=#{oldNum})
+                                      OR (username=#{newUsername} AND username!=#{oldUsername})
     </select>
 
     <select id="getAdminInfoById" resultType="com.tencent.wxcloudrun.model.Admin">

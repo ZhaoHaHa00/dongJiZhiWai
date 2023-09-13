@@ -22,18 +22,9 @@ public class AdminServiceImpl implements AdminService {
         List<Admin> adminList = adminMapper.getAllAdmin(storeName, city);
         for (Admin admin : adminList) {
             if (Objects.isNull(admin.getCity())) {
-                Admin validItem = adminMapper.validNewItemNum(admin.getValidNum());
-                if (Objects.nonNull(validItem)){
-                    return ApiResponse.error("编号已存在");
-                }
                 admin.setCity("");
             }
             if (Objects.isNull(admin.getStoreName())) {
-                Admin oldItem = adminMapper.getAdminInfoById(admin.getId());
-                Admin validItem = adminMapper.validOldItemNum(oldItem.getValidNum(), admin.getValidNum());
-                if (Objects.nonNull(validItem)){
-                    return ApiResponse.error("编号已存在");
-                }
                 admin.setStoreName("");
             }
         }
@@ -42,10 +33,35 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ApiResponse updateAdmin(Admin admin) {
+
         admin.setType(2);
         if (Objects.isNull(admin.getId())) {
+
+            Admin validItem = adminMapper.validNewItem(admin.getValidNum(), admin.getUsername());
+            if (Objects.nonNull(validItem)){
+                if (admin.getUsername().equals(validItem.getUsername())) {
+                    return ApiResponse.error("账号已存在");
+                }
+                if (admin.getValidNum().equals(validItem.getValidNum())) {
+                    return ApiResponse.error("编号已存在");
+                }
+            }
+
             adminMapper.insertAdmin(admin);
         } else {
+
+            Admin oldItem = adminMapper.getAdminInfoById(admin.getId());
+            Admin validItem = adminMapper.validOldItem(oldItem.getValidNum(), admin.getValidNum(),
+                    oldItem.getUsername(), admin.getUsername());
+            if (Objects.nonNull(validItem)){
+                if (admin.getUsername().equals(validItem.getUsername())) {
+                    return ApiResponse.error("账号已存在");
+                }
+                if (admin.getValidNum().equals(validItem.getValidNum())) {
+                    return ApiResponse.error("编号已存在");
+                }
+            }
+
             adminMapper.updateAdmin(admin);
         }
         return ApiResponse.ok();

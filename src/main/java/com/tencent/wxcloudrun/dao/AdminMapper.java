@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface AdminMapper {
 
-    Admin getAdminInfo(@Param("loginDTO") LoginDTO loginDTO);
+    List<Admin> getAdminInfo(@Param("loginDTO") LoginDTO loginDTO);
 
     List<Admin> getAllAdmin(@Param("storeName")String storeName, @Param("city")String city);
 
@@ -20,9 +20,10 @@ public interface AdminMapper {
 
     void deleteAdmin(@Param("id") Integer id);
 
-    Admin validNewItemNum(@Param("validNum") String validNum);
+    Admin validNewItem(@Param("validNum") String validNum, @Param("username")String username);
 
-    Admin validOldItemNum(@Param("oldNum") String oldNum, @Param("newNum") String newNum);
+    Admin validOldItem(@Param("oldNum") String oldNum, @Param("newNum") String newNum, @Param("oldUsername")String oldUsername,
+                       @Param("newUsername")String newUsername);
 
     Admin getAdminInfoById(@Param("id") Long id);
 }
