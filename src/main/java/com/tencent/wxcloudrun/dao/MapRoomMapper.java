@@ -1,6 +1,5 @@
 package com.tencent.wxcloudrun.dao;
 
-import com.tencent.wxcloudrun.model.MapRoom;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

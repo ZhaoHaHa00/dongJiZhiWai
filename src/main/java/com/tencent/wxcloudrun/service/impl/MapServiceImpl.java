@@ -7,12 +7,10 @@ import com.tencent.wxcloudrun.dao.MapRoleMapper;
 import com.tencent.wxcloudrun.dao.MapRoomMapper;
 import com.tencent.wxcloudrun.dto.RoleWalkDTO;
 import com.tencent.wxcloudrun.model.MapRole;
-import com.tencent.wxcloudrun.model.MapRoom;
 import com.tencent.wxcloudrun.service.MapService;
 import com.tencent.wxcloudrun.vo.MapRoomVO;
 import com.tencent.wxcloudrun.vo.RoleClueVO;
 import com.tencent.wxcloudrun.vo.RolePositionVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -172,7 +170,9 @@ public class MapServiceImpl implements MapService {
                 boolean allFinished = true;
                 for (Map.Entry<Integer, List<MapRole>> entry : mapRoleMap.entrySet()) {
                     lastMapRole = entry.getValue().stream().max(Comparator.comparing(MapRole::getArrivedTime)).get();
-                    if (!((lastMapRole.getArrivedTime()==55 || lastMapRole.getArrivedTime()==60) && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
+                    if (!((lastMapRole.getArrivedTime()==50 || lastMapRole.getArrivedTime()==55 || lastMapRole.getArrivedTime()==60)
+                            && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))
+                    ) {
                         allFinished = false;
                         break;
                     }
@@ -270,7 +270,11 @@ public class MapServiceImpl implements MapService {
     public ApiResponse validSingleClue(String roomId, String roleId) {
         MapRole mapRole = mapRoleMapper.getLastMapRoom(Long.valueOf(roomId), Integer.valueOf(roleId));
 
-        if (Objects.nonNull(mapRole) && (mapRole.getArrivedTime()==55 || mapRole.getArrivedTime()==60)) {
+        if (Objects.nonNull(mapRole) &&
+                (mapRole.getArrivedTime()==55 || mapRole.getArrivedTime()==60 ||
+                        (mapRole.getArrivedTime()==50 && mapRole.getMapRoom()==9)
+                )
+        ) {
             return ApiResponse.ok();
         }
         return ApiResponse.error("no");
