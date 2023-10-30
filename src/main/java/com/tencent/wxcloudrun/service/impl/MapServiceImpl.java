@@ -255,7 +255,7 @@ public class MapServiceImpl implements MapService {
             return ApiResponse.error("请先完成全部路线");
         }
         int lastArrivedTime = lastMapRole.getArrivedTime();
-        if (lastArrivedTime!=60 && !(lastArrivedTime==55 && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
+        if (lastArrivedTime!=60 && !((lastArrivedTime==55 || lastArrivedTime==50) && finalMapRoom.equals(lastMapRole.getMapRoom().toString()))) {
             return ApiResponse.error("请先完成全部路线");
         }
 
